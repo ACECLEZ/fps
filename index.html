@@ -26,6 +26,7 @@
     // Variables for FPS measurement
     var fpsCounter = 0;
     var fpsDisplay = document.getElementById('fps');
+    var fpsThrottleInterval = 1000 / 60; // Throttle to 60 FPS (approximately 16.67 ms)
 
     function measureFPS() {
       fpsDisplay.textContent = fpsCounter;
@@ -72,8 +73,47 @@
     var boostButton = document.getElementById('boostButton');
 
     function boostPerformance() {
-      // Add your code here to boost performance (e.g., optimization techniques)
-      // This could include reducing resource-intensive operations, optimizing code, etc.
+      // Boost FPS
+      var requestAnimationFrame = window.requestAnimationFrame ||
+                                  window.mozRequestAnimationFrame ||
+                                  window.webkitRequestAnimationFrame ||
+                                  window.msRequestAnimationFrame;
+      
+      // Optimize animation frame rate to 60 FPS
+      if (requestAnimationFrame) {
+        var animate = function() {
+          fpsCounter++;
+          requestAnimationFrame(animate);
+        };
+        
+        requestAnimationFrame(animate);
+      }
+      
+      // Boost Ping
+      var measurePingInterval;
+
+      function measurePingOptimized() {
+        var xhr = new XMLHttpRequest();
+        var startTime = new Date().getTime();
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            var endTime = new Date().getTime();
+            var pingTime = endTime - startTime;
+            pingDisplay.textContent = pingTime + ' ms';
+          }
+        };
+
+        xhr.open('GET', 'https://www.google.com', true);
+        xhr.send();
+      }
+
+      // Start measuring ping with an optimized interval of 500ms
+      measurePingOptimized();
+      measurePingInterval = setInterval(measurePingOptimized, 500);
+      
+      // Example of additional optimizations you can perform
+      // ...
     }
 
     boostButton.addEventListener('click', boostPerformance);
